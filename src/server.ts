@@ -1,7 +1,3 @@
-/**
- * Setup express server.
- */
-
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import path from "path";
@@ -19,7 +15,6 @@ import HttpStatusCodes from "@src/common/HttpStatusCodes";
 import { RouteError } from "@src/common/classes";
 import { NodeEnvs } from "@src/common/misc";
 
-import apiRouter from "@src/routes";
 import ExampleService from "./services/ExampleService";
 
 // **** Variables **** //
@@ -92,5 +87,16 @@ app.get("/examples", async (_: Request, res: Response) => {
 });
 
 // **** Export default **** //
+import db from "./models"
+
+// @ts-ignore
+db.sequelize.sync()
+  .then(() => {
+    console.log("Synced db.");
+  })
+  .catch((error: Error) => {
+    console.log("Failed to sync db: " + error.message);
+  });
+
 
 export default app;
