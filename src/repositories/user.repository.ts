@@ -3,15 +3,10 @@ import { Op } from 'sequelize'
 
 interface IUserRepository {
   save( user: User ): Promise<User>;
-
-  retrieveAll( searchParams: { title: string, published: boolean } ): Promise<User[]>;
-
+  retrieveAll( searchParams: { name: string } ): Promise<User[]>;
   retrieveById( userId: number ): Promise<User | null>;
-
   update( user: User ): Promise<number>;
-
   delete( userId: number ): Promise<number>;
-
   deleteAll(): Promise<number>;
 }
 
@@ -19,9 +14,9 @@ class UserRepository implements IUserRepository {
   async save( user: User ): Promise<User> {
     try {
       return await User.create( {
-        title: user.title,
+        name: user.name,
         description: user.description,
-        published: user.published
+        created: user.created
       } )
     } catch ( err ) {
       throw new Error( 'Failed to create User!' )
@@ -29,17 +24,14 @@ class UserRepository implements IUserRepository {
   }
 
 
-  async retrieveAll( searchParams: { title?: string, published?: boolean } ): Promise<User[]> {
+  async retrieveAll( searchParams: { name?: string } ): Promise<User[]> {
     try {
       let condition: {
-        published?: boolean
-        title?:  { [ key: symbol ]: string}
+        created?: boolean
+        name?:  { [ key: symbol ]: string}
       } = {}
-
-      if ( searchParams?.published ) condition.published = true
-
-      if ( searchParams?.title )
-        condition.title = { [ Op.like ]: `%${ searchParams.title }%` }
+      if ( searchParams?.name)
+        condition.name = { [ Op.like ]: `%${ searchParams.name }%` }
 
       return await User.findAll( { where: condition } )
     } catch ( error ) {
@@ -56,11 +48,11 @@ class UserRepository implements IUserRepository {
   }
 
   async update(user: User): Promise<number> {
-    const { id, title, description, published } = user;
+    const { id, name, description, created } = user;
 
     try {
       const affectedRows = await User.update(
-        { title, description, published },
+        { name, description, created },
         { where: { id: id } }
       );
 

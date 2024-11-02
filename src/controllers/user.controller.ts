@@ -2,40 +2,88 @@ import { Request, Response } from 'express'
 import UserRepository from '../repositories/user.repository'
 
 export default class UserController {
-  public async create( request: Request, response: Response ) {
-    const result = await UserRepository.save(request.body)
+  public async create(request: Request, response: Response) {
+    if (!request.body.name) {
+      response.status(400).send({
+        message: "Content can not be empty!"
+      })
+      return
+    }
 
-    return response.json(result)
+    try {
+      const result = await UserRepository.save(request.body)
+      return response.status(200).send(result)
+    }
+    catch (err) {
+      response.status(500).send({
+        message: "Some error occurred while retrieving users."
+      });
+    }
   }
 
-  public async findAll( request: Request, response: Response ) {
-    const result = await UserRepository.retrieveAll(request.params)
+  public async findAll(request: Request, response: Response) {
+    try {
+      const result = await UserRepository.retrieveAll(request.params)
 
-    return response.json(result)
+      return response.status(200).send(result)
+    }
+    catch (err) {
+      response.status(500).send({
+        message: "Some error occurred while retrieving all users."
+      });
+    }
+
   }
 
-  public async findOne( request: Request, response: Response ) {
-    const result = await UserRepository.retrieveById(+request.params.id)
+  public async findOne(request: Request, response: Response) {
+    try {
+      const result = await UserRepository.retrieveById(+request.params.id)
 
-    return response.json(result)
+      return response.status(200).send(result)
+    }
+    catch (err) {
+      response.status(500).send({
+        message: "Some error occurred while find user."
+      });
+    }
   }
 
-  public async update( request: Request, response: Response ) {
-    const result = await UserRepository.update(request.body)
+  public async update(request: Request, response: Response) {
+    try {
+      const result = await UserRepository.update(request.body)
 
-    return response.json(result)
+      return response.status(200).send(result)
+    }
+    catch (err) {
+      response.status(500).send({
+        message: "Some error occurred while update user."
+      });
+    }
   }
 
-  public async delete( request: Request, response: Response ) {
-    return
+  public async delete(request: Request, response: Response) {
+    try {
+      const result = await UserRepository.delete(+request.params.id)
+
+      return response.status(200).send(result)
+    }
+    catch (err) {
+      response.status(500).send({
+        message: "Some error occurred while delete user."
+      });
+    }
   }
 
-  public async deleteAll( request: Request, response: Response ) {
-    const result = await UserRepository.delete(+request.params.id)
+  public async deleteAll(request: Request, response: Response) {
+    try {
+      const result = await UserRepository.deleteAll()
 
-    return response.json(result)
-  }
-
-  public async findAllPublished( request: Request, response: Response ) {
+      return response.status(200).send(result)
+    }
+    catch (err) {
+      response.status(500).send({
+        message: "Some error occurred while delete all users."
+      });
+    }
   }
 }

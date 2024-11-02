@@ -1,33 +1,35 @@
 import { Model, Table, Column, DataType } from 'sequelize-typescript'
 
 
-@Table( {
-  tableName: 'tutorials'
-} )
-export default class Tutorial extends Model {
-  @Column( {
+@Table({
+  tableName: 'users'
+})
+class User extends Model {
+  @Column({
     type: DataType.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     field: 'id'
-  } )
+  })
   id?: number
 
-  @Column( {
-    type: DataType.STRING( 255 ),
+  @Column({
+    type: DataType.STRING(255),
     field: 'email'
-  } )
-  title?: string
+  })
+  name?: string
 
-  @Column( {
-    type: DataType.STRING( 255 ),
+  @Column({
+    type: DataType.STRING(255),
     field: 'name'
-  } )
+  })
   description?: string
 
-  @Column( {
+  @Column({
     type: DataType.DATE,
     field: 'created'
-  } )
-  published?: Date
+  })
+  created?: Date
 }
+
+export default User

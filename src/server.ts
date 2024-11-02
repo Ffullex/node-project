@@ -1,13 +1,13 @@
-import morgan from "morgan";
-import path from "path";
-import helmet from "helmet";
-import express, { Request, Response, NextFunction, Application } from "express";
-import EnvVars from "@src/common/EnvVars";
+import morgan from "morgan"
+import path from "path"
+import helmet from "helmet"
+import express, { Request, Response, NextFunction, Application } from "express"
+import EnvVars from "@src/common/EnvVars"
 
-import "express-async-errors";
-import { NodeEnvs } from "@src/common/misc";
+import "express-async-errors"
+import { NodeEnvs } from "@src/common/misc"
 
-import ExampleService from "./services/ExampleService";
+import ExampleService from "./services/ExampleService"
 
 // **** Variables **** //
 import Server from './index'
