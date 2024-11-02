@@ -15,7 +15,7 @@ class UserRepository implements IUserRepository {
     try {
       return await User.create( {
         name: user.name,
-        description: user.description,
+        email: user.email,
         created: user.created
       } )
     } catch ( err ) {
@@ -48,11 +48,11 @@ class UserRepository implements IUserRepository {
   }
 
   async update(user: User): Promise<number> {
-    const { id, name, description, created } = user;
+    const { id, name, email, created } = user;
 
     try {
       const affectedRows = await User.update(
-        { name, description, created },
+        { name, email, created },
         { where: { id: id } }
       );
 

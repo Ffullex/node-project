@@ -4,6 +4,7 @@ import { Model, Table, Column, DataType } from 'sequelize-typescript'
 @Table({
   tableName: 'users'
 })
+
 class User extends Model {
   @Column({
     type: DataType.INTEGER,
@@ -15,15 +16,15 @@ class User extends Model {
 
   @Column({
     type: DataType.STRING(255),
-    field: 'email'
+    field: 'name'
   })
   name?: string
 
   @Column({
     type: DataType.STRING(255),
-    field: 'name'
+    field: 'email'
   })
-  description?: string
+  email?: string
 
   @Column({
     type: DataType.DATE,
