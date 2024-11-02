@@ -1,32 +1,20 @@
-import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import path from "path";
 import helmet from "helmet";
-import express, { Request, Response, NextFunction } from "express";
-import logger from "jet-logger";
+import express, { Request, Response, NextFunction, Application } from "express";
+import EnvVars from "@src/common/EnvVars";
 
 import "express-async-errors";
-
-import BaseRouter from "@src/routes";
-
-import Paths from "@src/common/Paths";
-import EnvVars from "@src/common/EnvVars";
-import HttpStatusCodes from "@src/common/HttpStatusCodes";
-import { RouteError } from "@src/common/classes";
 import { NodeEnvs } from "@src/common/misc";
 
 import ExampleService from "./services/ExampleService";
 
 // **** Variables **** //
+import Server from './index'
 
-const app = express();
-
-// **** Setup **** //
-
-// Basic middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser(EnvVars.CookieProps.Secret));
+const app: Application = express()
+const server: Server = new Server( app )
+const PORT: number = process.env.PORT ? parseInt( process.env.PORT, 10 ) : 8080
 
 // Show routes called in console during development
 if (EnvVars.NodeEnv === NodeEnvs.Dev.valueOf()) {
@@ -38,28 +26,20 @@ if (EnvVars.NodeEnv === NodeEnvs.Production.valueOf()) {
   app.use(helmet());
 }
 
-// Add APIs, must be after middleware
-app.use(Paths.Base, BaseRouter);
 
 // Add error handler
-app.use(
-  (
-    err: Error,
-    _: Request,
-    res: Response,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    next: NextFunction
-  ) => {
-    if (EnvVars.NodeEnv !== NodeEnvs.Test.valueOf()) {
-      logger.err(err, true);
+app
+  .listen( PORT, 'localhost', function () {
+    console.log( `Server is running on port ${ PORT }.` )
+  } )
+  .on( 'error', ( err: any ) => {
+    if ( err.code === 'EADDRINUSE' ) {
+      console.log( 'Error: address already in use' )
+    } else {
+      console.log( err )
     }
-    let status = HttpStatusCodes.BAD_REQUEST;
-    if (err instanceof RouteError) {
-      status = err.status;
-    }
-    return res.status(status).json({ error: err.message });
-  }
-);
+  } )
+
 
 // **** Front-End Content **** //
 
@@ -86,17 +66,3 @@ app.get("/examples", async (_: Request, res: Response) => {
   return res.end(JSON.stringify(await ExampleService.getAll()))
 });
 
-// **** Export default **** //
-import db from "./models"
-
-// @ts-ignore
-db.sequelize.sync()
-  .then(() => {
-    console.log("Synced db.");
-  })
-  .catch((error: Error) => {
-    console.log("Failed to sync db: " + error.message);
-  });
-
-
-export default app;

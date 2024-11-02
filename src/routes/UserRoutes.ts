@@ -1,54 +1,38 @@
-import HttpStatusCodes from '@src/common/HttpStatusCodes';
-import UserService from '@src/services/UserService';
-import User from '@src/models/User';
+import { Router } from 'express'
+import UserController from '../controllers/user.controller'
 
-import { IReq, IRes } from './common/types';
-import check from './common/check';
+class UserRoutes {
+  router = Router()
+  controller = new UserController()
 
+  constructor() {
+    this.initializeRouter()
+  }
 
-// **** Functions **** //
+  initializeRouter() {
+    // @ts-ignore
+    this.router.get( '/all', this.controller.findAll )
 
-/**
- * Get all users.
- */
-async function getAll(_: IReq, res: IRes) {
-  const users = await UserService.getAll();
-  return res.status(HttpStatusCodes.OK).json({ users });
+    // Create a new User
+    // @ts-ignore
+    this.router.post( '/', this.controller.create )
+
+    // Retrieve all Users
+    // @ts-ignore
+    this.router.get( '/', this.controller.findAll )
+
+    // Retrieve a single User with id
+    // @ts-ignore
+    this.router.get( '/:id', this.controller.findOne )
+
+    // Update a User with id
+    // @ts-ignore
+    this.router.put( '/:id', this.controller.update )
+
+    // Delete a User with id
+    // @ts-ignore
+    this.router.delete( '/:id', this.controller.delete )
+  }
 }
 
-/**
- * Add one user.
- */
-async function add(req: IReq, res: IRes) {
-  const user = check.isValid(req.body, 'user', User.isUser);
-  await UserService.addOne(user);
-  return res.status(HttpStatusCodes.CREATED).end();
-}
-
-/**
- * Update one user.
- */
-async function update(req: IReq, res: IRes) {
-  const user = check.isValid(req.body, 'user', User.isUser);
-  await UserService.updateOne(user);
-  return res.status(HttpStatusCodes.OK).end();
-}
-
-/**
- * Delete one user.
- */
-async function delete_(req: IReq, res: IRes) {
-  const id = check.isNum(req.params, 'id');
-  await UserService.delete(id);
-  return res.status(HttpStatusCodes.OK).end();
-}
-
-
-// **** Export default **** //
-
-export default {
-  getAll,
-  add,
-  update,
-  delete: delete_,
-} as const;
+export default new UserRoutes().router

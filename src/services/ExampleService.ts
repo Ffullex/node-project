@@ -1,7 +1,7 @@
 import { RouteError } from '@src/common/classes';
 import HttpStatusCodes from '@src/common/HttpStatusCodes';
 
-import ExampleRepo from '@src/repos/ExampleRepo';
+import ExampleRepo from '@src/repositories/ExampleRepo';
 import { ExampleType } from '@src/models/Example';
 
 
