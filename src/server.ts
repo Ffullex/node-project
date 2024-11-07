@@ -26,7 +26,7 @@ if (EnvVars.NodeEnv === NodeEnvs.Production.valueOf()) {
   app.use(helmet());
 }
 
-
+console.log(111222333)
 // Add error handler
 app
   .listen( PORT, 'localhost', function () {
