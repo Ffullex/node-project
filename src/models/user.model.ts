@@ -5,7 +5,7 @@ import { Model, Table, Column, DataType } from 'sequelize-typescript'
   tableName: 'users'
 })
 
-class User extends Model {
+export default class User extends Model {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
@@ -32,5 +32,3 @@ class User extends Model {
   })
   created?: Date
 }
-
-export default User

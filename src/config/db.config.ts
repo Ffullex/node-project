@@ -1,14 +1,14 @@
 export const config = {
-  HOST: "localhost",
+  HOST: "127.0.0.1",
   USER: "postgres",
-  PASSWORD: "123",
-  DB: "testdb",
+  PASSWORD: "admin4321",
+  DB: "myDB",
+  port: 5432,
+  dialect: 'postgres',
   pool: {
       max: 5,
       min: 0,
       acquire: 30000,
-      idle: 10000
+      idle: 20000,
   }
-};
-
-export const dialect = "postgres";
+}

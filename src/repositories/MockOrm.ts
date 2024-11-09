@@ -20,7 +20,6 @@ interface IDb {
  * Fetch the json from the file.
  */
 function openDb(jsonFile = DB_FILE_NAME): Promise<IDb> {
-  console.log(jsonfile.readFile(__dirname + '/' + jsonFile) as Promise<IDb>)
   return jsonfile.readFile(__dirname + '/' + jsonFile) as Promise<IDb>;
 }
 

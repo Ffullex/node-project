@@ -3,6 +3,15 @@ import Routes from './routes'
 import cookieParser from "cookie-parser";
 import EnvVars from "@src/common/EnvVars";
 
+import morgan from "morgan"
+import path from "path"
+import helmet from "helmet"
+import { Request, Response } from "express"
+
+import "express-async-errors"
+import { NodeEnvs } from "@src/common/misc"
+import Database from './db';
+
 export default class Server {
   constructor(app: Application) {
     this.config(app);
@@ -14,18 +23,7 @@ export default class Server {
     app.use( express.urlencoded( { extended: true } ) )
     app.use(cookieParser(EnvVars.CookieProps.Secret));
   }
-}console.log(111222333)
-
-import morgan from "morgan"
-import path from "path"
-import helmet from "helmet"
-import { Request, Response } from "express"
-
-import "express-async-errors"
-import { NodeEnvs } from "@src/common/misc"
-
-import ExampleService from "./services/ExampleService"
-
+}
 
 const app: Application = express()
 const server: Server = new Server( app )
@@ -41,10 +39,10 @@ if (EnvVars.NodeEnv === NodeEnvs.Production.valueOf()) {
   app.use(helmet());
 }
 
-console.log(111222333)
 // Add error handler
 app
   .listen( PORT, 'localhost', function () {
+    new Database()
     console.log( `Server is running on port ${ PORT }.` )
   } )
   .on( 'error', ( err: any ) => {
@@ -68,16 +66,12 @@ app.use(express.static(staticDir));
 
 // Nav to users pg by default
 app.get("/", (_: Request, res: Response) => {
-  return res.redirect("/examples");
+  return res.redirect("/api/users");
 });
 
-// Redirect to login if not logged in.
+/* // Redirect to login if not logged in.
 app.get("/users", (_: Request, res: Response) => {
   return res.sendFile("users.html", { root: viewsDir });
-});
+}); */
 
-// Redirect to login if not logged in.
-app.get("/examples", async (_: Request, res: Response) => {
-  return res.end(JSON.stringify(await ExampleService.getAll()))
-});
 

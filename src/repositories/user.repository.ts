@@ -30,11 +30,11 @@ class UserRepository implements IUserRepository {
         created?: boolean
         name?:  { [ key: symbol ]: string}
       } = {}
-      if ( searchParams?.name)
-        condition.name = { [ Op.like ]: `%${ searchParams.name }%` }
+      if ( searchParams?.name) condition.name = { [ Op.like ]: `%${ searchParams.name }%` }
 
       return await User.findAll( { where: condition } )
     } catch ( error ) {
+      console.error(222, error)
       throw new Error( 'Failed to retrieve Users!' )
     }
   }

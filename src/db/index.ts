@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript'
-import { config, dialect } from '../config/db.config'
+import { config } from '../config/db.config'
 import User from '../models/user.model'
 
 class Database {
@@ -15,14 +15,15 @@ class Database {
       username: config.USER,
       password: config.PASSWORD,
       host: config.HOST,
-      dialect: dialect,
+      dialect: config.dialect as 'postgres',
+      port: config.port,
+      models: [ User ],
       pool: {
         max: config.pool.max,
         min: config.pool.min,
         acquire: config.pool.acquire,
         idle: config.pool.idle
       },
-      models: [ User ]
     } )
 
     await this.sequelize
@@ -37,4 +38,3 @@ class Database {
 }
 
 export default Database
-console.log (new Database)

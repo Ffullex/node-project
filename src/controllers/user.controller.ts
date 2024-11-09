@@ -28,6 +28,7 @@ export default class UserController {
       return response.status(200).send(result)
     }
     catch (err) {
+      console.error(err)
       response.status(500).send({
         message: "Some error occurred while retrieving all users."
       });

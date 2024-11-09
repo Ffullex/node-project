@@ -10,8 +10,6 @@ class UserRoutes {
   }
 
   initializeRouter() {
-    // @ts-ignore
-    this.router.get( '/all', this.controller.findAll )
 
     // Create a new User
     // @ts-ignore
