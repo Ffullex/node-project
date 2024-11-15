@@ -29,6 +29,7 @@ class Database {
     await this.sequelize
       .authenticate()
       .then( () => {
+        this.sequelize?.sync()
         console.log( 'Connection has been established successfully.' )
       } )
       .catch( ( err ) => {
